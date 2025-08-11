@@ -1,0 +1,136 @@
+# ##############################################################################
+# ## Arquivo .gitignore para Projetos Python de Engenharia de Dados e ML      ##
+# ## Compilador: Python 3.12+                                                 ##
+# ## Foco: Engenharia de Dados, Machine Learning, Redes Neurais Convolucionais##
+# ##############################################################################
+
+# === Ambientes Virtuais (Virtual Environments) ===
+# Nunca comite a pasta do seu ambiente virtual.
+.env
+.venv
+venv
+env/
+venv/
+ENV/
+VENV/
+*/.env/
+*/.venv/
+*/env/
+*/venv/
+
+# === Arquivos de Cache e Compilados do Python (Python Bytecode and Cache) ===
+# Arquivos gerados pelo interpretador Python.
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.wsgi
+
+# Cache de pacotes e testes
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache
+.tox/
+.nox/
+
+# === IDEs e Editores de Código (IDEs and Code Editors) ===
+# Configurações específicas do seu ambiente de desenvolvimento.
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+
+# === Credenciais e Segredos (Credentials and Secrets) ===
+# NUNCA comite chaves de API, senhas ou qualquer tipo de segredo.
+# É uma boa prática usar um arquivo .env.example com variáveis vazias.
+*.env
+.env.*
+!/.env.example
+credentials.json
+secrets.yaml
+secrets.toml
+*.pem
+*.key
+*.s3cfg
+*.boto
+*secret*.json
+google_credentials.json
+resource/
+repository/
+
+# Logs de ferramentas de experimentação
+mlruns/
+dvc.lock
+.dvc/cache
+
+# === Notebooks (Jupyter, etc.) ===
+# Ignore os checkpoints automáticos do Jupyter.
+.ipynb_checkpoints/
+
+# === Arquivos de Distribuição/Build (Distribution/Build Files) ===
+# Arquivos gerados ao empacotar seu projeto.
+dist/
+build/
+*.egg-info/
+wheels/
+*.tar.gz
+*.whl
+
+# === Logs e Relatórios (Logs and Reports) ===
+# Arquivos de log e relatórios gerados pela sua aplicação.
+*.log
+logs/
+*/logs/
+log/
+celerybeat-schedule
+*.pid
+*.pid.lock
+
+# Relatórios de cobertura de código e profilers
+.coverage
+.coverage.*
+htmlcov/
+.cprofile
+.prof
+result/
+
+# === Arquivos de Sistema Operacional (Operating System Files) ===
+# Arquivos de metadados do macOS e Windows.
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === Engenharia de Dados (Data Engineering) ===
+# Ignore arquivos de dados brutos, intermediários e processados.
+# Eles geralmente são muito grandes e não pertencem ao controle de versão.
+# Se precisar de um arquivo de amostra, faça uma exceção com ! (ex: !data/sample.csv)
+data/
+data/processed/
+data/raw/
+raw/
+raw_data/
+processed_data/
+*.csv
+*.json
+*.jsonl
+*.parquet
+*.avro
+*.orc
+*.xml
+*.xls
+*.xlsx
+*.db
+*.sqlite
+*.sqlite3
+
+# ####################### FIM DO ARQUIVO .GITIGNORE ########################

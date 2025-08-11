@@ -1,0 +1,16 @@
+# Configurações gerais da aplicação e do pipeline
+
+# Caminhos (Paths)
+# Use caminhos absolutos para evitar problemas no cron
+image_source_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/raw'
+secrets_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/repository'
+results_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/result'
+project_root_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM'
+
+# Configurações da Imagem
+image_pattern: 'imagem*.jpg'
+resize_dimensions: [256, 256]
+max_file_size_mb: 10 # Limite de tamanho para segurança (ex: 10 MB)
+
+# Configurações da API
+api_endpoint: 'http://localhost:3001/predict'
