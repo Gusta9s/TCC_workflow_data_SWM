@@ -14,3 +14,16 @@ max_file_size_mb: 10 # Limite de tamanho para segurança (ex: 10 MB)
 
 # Configurações da API
 api_endpoint: 'http://localhost:3001/predict'
+
+# Configurações do Backblaze B2 Storage
+b2_storage:
+  # O keyID da sua Application Key
+  key_id: '005ceee880b4d780000000001'
+  # O applicationKey da sua Application Key
+  application_key: 'K005n6QlaGyfwzt5PUF0Ax5JPE/yXC0'
+  # O endpoint S3 do seu bucket
+  endpoint_url: 's3.us-east-005.backblazeb2.com'
+  # O nome do bucket que você criou
+  bucket_name: 'tcc-pipeline-imagens-gustavo'
+  # Local para salvar o arquivo baixado temporariamente
+  download_temp_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/temp'

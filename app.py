@@ -34,22 +34,23 @@ def main():
     """Função principal que orquestra o pipeline."""
     start_timestamp = datetime.now().isoformat()
     config = load_config()
-    image_path = None
+    downloaded_image_path = None
+    resized_image_path = None
     
     try:
-        # 1. Encontrar a imagem mais recente
-        image_path = image_handler.find_latest_image(
-            config['image_source_dir'], config['image_pattern']
+        # 1. Encontrar e baixar a imagem mais recente do Backblaze B2
+        downloaded_image_path = image_handler.find_and_download_latest_image_from_b2(
+            config['b2_storage']
         )
         
         # 2. Validar a imagem
-        image_handler.validate_image(image_path, config['max_file_size_mb'])
+        image_handler.validate_image(downloaded_image_path, config['max_file_size_mb'])
         
         # 3. Ler as coordenadas das secrets
         coords = file_manager.read_coordinates(config['secrets_dir'])
         
         # 4. Redimensionar a imagem
-        resized_image_path = image_handler.resize_image(image_path, config['resize_dimensions'])
+        resized_image_path = image_handler.resize_image(downloaded_image_path, config['resize_dimensions'])
         
         # 5. Treinar o modelo (primeira requisição)
         api_client.train_model(config['api_endpoint'])
@@ -58,18 +59,15 @@ def main():
         prediction_result = api_client.get_prediction(
             config['api_endpoint'], coords, resized_image_path
         )
-        
-        # Limpa o arquivo temporário
-        os.remove(resized_image_path)
 
         # 7. Verifica o status da previsão
         if prediction_result.get('status') != 'success':
-            previsao_insuficiente(start_timestamp, image_path, prediction_result, config)
+            previsao_insuficiente(start_timestamp, resized_image_path, prediction_result, config)
 
         # 8. Preparar e salvar o resultado de sucesso
         success_data = {
             'start_timestamp': start_timestamp,
-            'processed_image': os.path.basename(image_path),
+            'processed_image': os.path.basename(resized_image_path),
             'status': 'success',
             **prediction_result
         }
@@ -82,12 +80,22 @@ def main():
         
         rejection_data = {
             'start_timestamp': start_timestamp,
-            'failed_image': os.path.basename(image_path) if image_path else 'N/A',
+            'failed_image': os.path.basename(resized_image_path) if resized_image_path else 'N/A',
             'error_message': str(e)
         }
         result_file = file_manager.write_result(config['results_dir'], 'failure', rejection_data)
         print(f"Resultado de rejeição salvo em: {result_file}")
         sys.exit(1)
+
+    finally:
+        # Bloco de limpeza continua o mesmo e é crucial
+        print("Limpando arquivos temporários...")
+        if downloaded_image_path and os.path.exists(downloaded_image_path):
+            os.remove(downloaded_image_path)
+            print(f"Removido: {downloaded_image_path}")
+        if resized_image_path and os.path.exists(resized_image_path):
+            os.remove(resized_image_path)
+            print(f"Removido: {resized_image_path}")
 
 if __name__ == '__main__':
     main()

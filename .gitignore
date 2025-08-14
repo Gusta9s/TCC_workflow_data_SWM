@@ -62,6 +62,7 @@ secrets.toml
 google_credentials.json
 resource/
 repository/
+temp/
 
 # Logs de ferramentas de experimentação
 mlruns/
