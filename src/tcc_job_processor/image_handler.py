@@ -1,5 +1,4 @@
 import os
-import glob
 from PIL import Image, ImageFile
 import boto3
 from botocore.exceptions import ClientError
@@ -7,17 +6,6 @@ import re
 
 # Permite o carregamento de imagens truncadas
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-def find_latest_image(source_dir: str, pattern: str) -> str:
-    """Encontra o arquivo mais recente que corresponde ao padrão no diretório."""
-    try:
-        list_of_files = glob.glob(os.path.join(source_dir, pattern))
-        if not list_of_files:
-            raise FileNotFoundError(f"Nenhuma imagem encontrada com o padrão '{pattern}' em '{source_dir}'")
-        latest_file = max(list_of_files, key=os.path.getctime)
-        return latest_file
-    except Exception as e:
-        raise RuntimeError(f"Erro ao procurar a imagem mais recente: {e}")
     
 def validate_image(image_path: str, max_size_mb: int) -> bool:
     """Valida a integridade e segurança da imagem."""
