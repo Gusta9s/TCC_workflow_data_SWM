@@ -2,10 +2,10 @@
 
 # Caminhos (Paths)
 # Use caminhos absolutos para evitar problemas no cron
-image_source_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/raw'
-secrets_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/repository'
-results_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/result'
-project_root_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM'
+image_source_dir: 'C:\Projetos\TCC\TCC_workflow_data_SWM\raw'
+secrets_dir: 'C:\Projetos\TCC\TCC_workflow_data_SWM\repository'
+results_dir: 'C:\Projetos\TCC\TCC_workflow_data_SWM\result'
+project_root_dir: 'C:\Projetos\TCC\TCC_workflow_data_SWM'
 
 # Configurações da Imagem
 image_pattern: 'imagem*.jpg'
@@ -25,5 +25,3 @@ b2_storage:
   endpoint_url: 's3.us-east-005.backblazeb2.com'
   # O nome do bucket que você criou
   bucket_name: 'tcc-pipeline-imagens-gustavo'
-  # Local para salvar o arquivo baixado temporariamente
-  download_temp_dir: '/home/gustavo/Projetos/TCC_workflow_data_SWM/temp'

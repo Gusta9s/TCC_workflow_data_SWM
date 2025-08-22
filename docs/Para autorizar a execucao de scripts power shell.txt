@@ -1,0 +1,7 @@
+Toda vez que for executar um novo terminal para executar o arquivo .ps1 do power shell, para cada novo terminal instanciado, voce vai prescisar fazer:
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+Execute o script:
+
+.\run_pipeline.ps1
