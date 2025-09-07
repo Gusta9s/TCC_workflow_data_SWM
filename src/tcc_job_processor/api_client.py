@@ -1,6 +1,28 @@
 import requests
 import os
 
+def get_origin_location(api_url: str) -> dict:
+    """Busca as coordenadas de origem de uma API de localização."""
+    try:
+        print("Buscando coordenadas de origem via API de localização...")
+        # Timeout de 10 segundos para a requisição
+        response = requests.get(api_url, timeout=10)
+        response.raise_for_status() # Lança exceção para erros HTTP (4xx ou 5xx)
+        
+        data = response.json()
+        
+        # Transforma o payload para o formato esperado pelo resto do pipeline
+        origin_coords = {
+            'origem_latitude': data['latitude'],
+            'origem_longitude': data['longitude']
+        }
+        print("Coordenadas de origem obtidas com sucesso da API.")
+        return origin_coords
+        
+    except requests.exceptions.RequestException as e:
+        # Re-lança a exceção para que o app.py possa tratá-la no bloco try/except
+        raise ConnectionError(f"Erro ao conectar com a API de localização: {e}")
+
 def train_model(api_url: str) -> dict:
     """Envia o comando de treinamento para a API."""
     try:

@@ -52,16 +52,29 @@ def main():
         step_start_time = time.perf_counter()
         image_handler.validate_image(downloaded_image_path, config['max_file_size_mb'])
         logs['tempo_validacao_arquivo'] = time.perf_counter() - step_start_time
-        
-        # 3. Ler as coordenadas das secrets
-        step_start_time = time.perf_counter()
-        coords = file_manager.read_coordinates(config['secrets_dir'])
-        logs['tempo_leitura_coordenadas'] = time.perf_counter() - step_start_time
 
-        # 4. Redimensionar a imagem
+        # 3. Redimensionar a imagem
         step_start_time = time.perf_counter()
         resized_image_path = image_handler.resize_image(downloaded_image_path, config['resize_dimensions'])
         logs['tempo_redimensionamento'] = time.perf_counter() - step_start_time
+
+        coords = {}
+        # 4.1: Tenta obter a ORIGEM da API
+        try:
+            origin_coords = api_client.get_origin_location(config['location_api_endpoint'])
+            coords.update(origin_coords)
+        except Exception as api_error:
+            # 4.2: Se a API falhar, usa o FALLBACK (arquivo .env)
+            print(f"AVISO: A API de localização falhou ({api_error}). Usando método de fallback (arquivo .env)...")
+            origin_coords_fallback = file_manager.read_origin_from_file(config['secrets_dir'])
+            coords.update(origin_coords_fallback)
+        
+        # 4.3: Obtém o DESTINO do arquivo .env
+        destination_coords = file_manager.read_destination_from_file(config['secrets_dir'])
+        
+        # 4.4: Concatena os dicionários para formar o objeto final
+        coords.update(destination_coords)
+        print("Coordenadas finais montadas com sucesso.")
         
         # 5. Obter a previsão
         step_start_time = time.perf_counter()

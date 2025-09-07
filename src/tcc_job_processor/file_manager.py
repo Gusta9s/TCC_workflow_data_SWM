@@ -2,35 +2,45 @@ import os
 import json
 from datetime import datetime
 
-def read_coordinates(secrets_dir: str) -> dict:
-    """Lê as coordenadas dos arquivos .env de origem e destino."""
-    coords = {}
+
+def read_origin_from_file(secrets_dir: str) -> dict:
+    """Lê as coordenadas de ORIGEM do arquivo secretOrigem.env (método de fallback)."""
     try:
+        coords = {}
         with open(os.path.join(secrets_dir, 'secretOrigem.env'), 'r') as f:
             for line in f:
-                if line.startswith('origem_latitude='):
+                if line.strip().startswith('origem_latitude='):
                     coords['origem_latitude'] = line.strip().split('=')[1]
-                if line.startswith('origem_longitude='):
+                if line.strip().startswith('origem_longitude='):
                     coords['origem_longitude'] = line.strip().split('=')[1]
+        if 'origem_latitude' not in coords or 'origem_longitude' not in coords:
+            raise ValueError("Não foi possível encontrar as coordenadas de origem no arquivo .env.")
+        return coords
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Arquivo de secret de origem não encontrado em '{secrets_dir}'.")
+    except Exception as e:
+        raise RuntimeError(f"Erro ao ler as coordenadas de origem do arquivo: {e}")
 
+
+def read_destination_from_file(secrets_dir: str) -> dict:
+    """Lê as coordenadas de DESTINO do arquivo secretDestino.env."""
+    try:
+        coords = {}
         with open(os.path.join(secrets_dir, 'secretDestino.env'), 'r') as f:
             for line in f:
-                if line.startswith('destino_latitude='):
+                if line.strip().startswith('destino_latitude='):
                     coords['destino_latitude'] = line.strip().split('=')[1]
-                if line.startswith('destino_longitude='):
+                if line.strip().startswith('destino_longitude='):
                     coords['destino_longitude'] = line.strip().split('=')[1]
-
-        if len(coords) != 4:
-            raise ValueError("Não foi possível encontrar todas as 4 coordenadas nos arquivos .env.")
-        
-        print("Coordenadas lidas com sucesso:", coords)
-        
+        if 'destino_latitude' not in coords or 'destino_longitude' not in coords:
+            raise ValueError("Não foi possível encontrar as coordenadas de destino no arquivo .env.")
         return coords
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"Arquivo de secret não encontrado: {e.filename}")
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Arquivo de secret de destino não encontrado em '{secrets_dir}'.")
     except Exception as e:
-        raise RuntimeError(f"Erro ao ler as coordenadas: {e}")
-    
+        raise RuntimeError(f"Erro ao ler as coordenadas de destino do arquivo: {e}")
+
+
 def write_result(base_path: str, status: str, data: dict):
     """
     Escreve o dicionário de dados em um arquivo .txt (formato JSON) no diretório
